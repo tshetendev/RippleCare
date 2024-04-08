@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All Campaigns</title>
+    <link rel="shortcut icon" href="./utils/ripplecare.png" type="x-icon">
+    <link rel="stylesheet" href="css/allcampign.css">
+    <link rel="stylesheet" href="css/nav.css">
+    <script src="js/logout.js"></script>
+    <script src="js/walletBalance.js"></script>
+
+</head>
+
+<body>
+    <header class="hero-banner">
+        <div class="hero-content">
+            <h1>All Campaigns</h1>
+            <p>Make a difference with every XRPL donation, empowering communities and fueling impactful change.</p>
+        </div>
+    </header>
+    <nav id="navigation">
+        <a href="index1.html">Home</a>
+        <a href="create-campaign.html">Create Campaign</a>
+        <a href="allCampaign.html">All Campaign</a>
+        <a href="mycampaign.html">My Campaigns</a>
+        <span id="walletBalance">Loading...</span>
+        <form id="logoutForm" action="/logout" method="POST">
+            <button type="submit">Logout</button>
+        </form>
+    </nav>
+    <h1 id="titlePage">All Campaigns</h1>
+    <div class="links">
+        <a href="completed-campaign.html">Completed Campaigns</a>
+        <a href="active-campaign.html">Active Campaigns</a>
+        
+    </div>
+    <button id="showDonationFormBtn">Donate to Campaign</button>
+    <div id="campaignList"></div>
+
+    <div class="overlay" id="transactionOverlay">
+        <div class="overlay-content" id="transactionOverlayContent">
+            <span class="close-btn" onclick="closeOverlay('transactionOverlay')">X</span>
+            <h2>Transactions</h2>
+            <div id="transactionList"></div>
+        </div>
+    </div>
+
+    <div class="donationFormOverlay" id="donationFormOverlay">
+        <div class="donationFormContainer">
+            <h1>Donate to Campaign</h1>
+            <form id="donationForm">
+                <label for="campaignId">Campaign ID:</label>
+                <input type="text" id="campaignId" name="campaignId" required><br>
+                <label for="amount">Enter Donation Amount:</label>
+                <input type="number" id="amount" name="amount" required><br>
+                <label for="walletSecret">Enter Wallet Secret:</label>
+                <input type="text" id="walletSecret" name="walletSecret" required><br>
+                <button type="submit">Donate</button>
+            </form>
+            <div id="message"></div>
+            <button id="closeDonationFormBtn">Close</button>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2024 RippleCare @ tshetendev All rights reserved.</p>
+    </footer>
+
+    <script>
+        document.getElementById('showDonationFormBtn').addEventListener('click', () => {
+            document.getElementById('donationFormOverlay').style.display = 'block';
+        });
+
+        document.getElementById('closeDonationFormBtn').addEventListener('click', () => {
+            document.getElementById('donationFormOverlay').style.display = 'none';
+        });
+
+        document.getElementById('donationForm').addEventListener('submit', async (event) => {
+            event.preventDefault();
+
+            const campaignId = document.getElementById('campaignId').value;
+            const amount = document.getElementById('amount').value;
+            const walletSecret = document.getElementById('walletSecret').value;
+
+            // Display "Please wait..." message
+            document.getElementById('message').textContent = 'Please wait...';
+
+            try {
+                const response = await fetch('/donate', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ campaignId, amount, walletSecret })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    document.getElementById('message').textContent = 'Donation successful!';
+                } else {
+                    document.getElementById('message').textContent = 'Donation failed. Please try again.';
+                }
+            } catch (error) {
+                console.error('Error donating:', error);
+                document.getElementById('message').textContent = 'An error occurred while processing your donation. Please try again later.';
+            }
+        });
+    </script>
+
+    <script src="./js/campaigns.js"></script>
+</body>
+
+</html>

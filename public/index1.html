@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RippleCare</title>
+    <link rel="shortcut icon" href="./utils/ripplecare.png" type="x-icon">
+    <link rel="stylesheet" href="css/nav.css">
+    <script src="js/logout.js"></script>
+    <script src="js/walletBalance.js"></script>
+
+</head>
+
+<body>
+    <header class="hero-banner">
+        <div class="hero-content">
+            <h1>Welcome to RippleCare</h1>
+            <p>Empowering positive change through donations on the XRPL</p>
+        </div>
+    </header>
+    <nav id="navigation">
+        <a href="index1.html">Home</a>
+        <a href="create-campaign.html">Create Campaign</a>
+        <a href="allCampaign.html">All Campaign</a>
+        <a href="mycampaign.html">My Campaigns</a>
+        <span id="walletBalance">Loading...</span>
+        <form id="logoutForm" action="/logout" method="POST">
+            <button type="submit">Logout</button>
+        </form>
+    </nav>
+
+    <div class="container">
+        <div class="section">
+            <img src="utils/ripplecare.jpeg" alt="About RippleCare">
+            <div class="section-content">
+                <h2 class="section-header">About RippleCare</h2>
+                <p>RippleCare is a platform dedicated to facilitating charitable donations using the
+                    XRP Ledger (XRPL). We aim to leverage the power and efficiency of blockchain technology to bring
+                    positive change to the world.</p>
+            </div>
+        </div>
+        <div class="section">
+            <div class="section-content">
+                <h2 class="section-header">Our Mission</h2>
+                <p>Our mission is to harness the potential of digital assets to support various
+                    causes and charities globally. Through transparent and secure transactions on the XRPL, we strive to
+                    make a meaningful impact on people's lives.</p>
+            </div>
+            <img src="utils/mission.jpg" alt="Our Mission">
+        </div>
+        <div class="section">
+            <img src="utils/vission.jpg" alt="Our Vision">
+            <div class="section-content">
+                <h2 class="section-header">Our Vision</h2>
+                <p>We envision a future where philanthropy is accessible to everyone, regardless of
+                    geographical boundaries or financial constraints. By fostering a culture of giving and innovation,
+                    we
+                    aim to create lasting change for generations to come.</p>
+            </div>
+        </div>
+        <div class="section">
+            <div class="section-content">
+                <h2 class="section-header">Donation Process</h2>
+                <p>Donating on RippleCare is simple and secure. Users can create campaigns to raise
+                    funds for their chosen causes, and supporters can contribute directly using XRP or other supported
+                    cryptocurrencies. All transactions are recorded on the XRPL, ensuring transparency and
+                    accountability.</p>
+            </div>
+            <img src="utils/xrpl.jpg" alt="Donation Process">
+        </div>
+        <div class="section">
+            <img src="utils/xrp.jpg" alt="Use of XRPL">
+            <div class="section-content">
+                <h2 class="section-header">Use of XRPL</h2>
+                <p>The XRP Ledger (XRPL) serves as the backbone of RippleCare's donation platform.
+                    Its fast transaction speeds, low fees, and decentralized nature make it the ideal choice for
+                    processing
+                    donations efficiently and securely. By leveraging XRPL's innovative features, we can provide a
+                    seamless
+                    donation experience for users worldwide.</p>
+            </div>
+        </div>
+        <div class="section">
+            <div class="section-content">
+                <h2 class="section-header">Contact Us</h2>
+                <p>For any inquiries or feedback, please contact us at:</p>
+                <p>Developer Email: tshetendev@gmail.com</p>
+            </div>
+        </div>
+    </div>
+    <footer>
+        <p>&copy; 2024 RippleCare @ tshetendev All rights reserved.</p>
+    </footer>
+    <style>
+        .section {
+            margin-bottom: 40px;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .section-header {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        .section-content {
+            line-height: 1.6;
+            max-width: 50%;
+        }
+
+        .section img {
+            max-width: 40%;
+            border-radius: 5px;
+        }
+
+        .section:nth-child(even) .section-content {
+            order: 1;
+        }
+
+        .section:nth-child(even) img {
+            order: 2;
+        }
+    </style>
+</body>
+
+</html>

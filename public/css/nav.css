@@ -1,0 +1,82 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+.hero-banner {
+    /* background-image: url('../utils/hero.jpg'); */
+    background-size: cover;
+    background-position: center;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    color: black;
+}
+
+.hero-content {
+    max-width: 600px;
+    padding: 20px;
+}
+
+header,
+nav,
+.container{
+    width: 100%;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+nav {
+    background-color: #f4f4f4;
+    padding: 10px 0;
+    text-align: center;
+    position: fixed;
+    top: 0;
+}
+
+nav a, nav span{
+    margin: 0 10px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: color 0.3s ease;
+    color: black;
+}
+
+nav span{
+    float: left;
+}
+
+nav form button{
+    position: absolute;
+    top: 10px;
+    right: 20px;
+    font-weight: bold;
+    font-size: large;
+    transition: color 0.3s ease;
+    color: black;
+    border: 0;
+    border-radius: 8px;
+}
+
+nav form button:hover{
+    color: green;
+    cursor: pointer;
+}
+
+nav a:hover{
+    color: green;
+}
+
+footer {
+    background-color: #333;
+    color: #fff;
+    text-align: center;
+    position: relative;
+    bottom: 0;
+    width: 100%;
+    padding: 5px;
+}

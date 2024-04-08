@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Completed Campaigns</title>
+    <link rel="shortcut icon" href="./utils/ripplecare.png" type="x-icon">
+    <link rel="stylesheet" href="css/allcampign.css">
+    <link rel="stylesheet" href="css/nav.css">
+    <script src="js/logout.js"></script>
+    <script src="js/walletBalance.js"></script>
+</head>
+
+<body>
+    <header class="hero-banner">
+        <div class="hero-content">
+            <h1>Completed Campaigns</h1>
+            <p>Unlock the potential of XRPL donations to drive social change and empower those in need.</p>
+        </div>
+    </header>
+    <nav id="navigation">
+        <a href="index1.html">Home</a>
+        <a href="create-campaign.html">Create Campaign</a>
+        <a href="allCampaign.html">All Campaign</a>
+        <a href="mycampaign.html">My Campaigns</a>
+        <span id="walletBalance">Loading...</span>
+        <form id="logoutForm" action="/logout" method="POST">
+            <button type="submit">Logout</button>
+        </form>
+    </nav>
+    <h1 id="titlePage">Completed Campaigns</h1>
+    <div class="links">
+        <a href="allCampaign.html">All Campaigns</a>
+        <a href="active-campaign.html">Active Campaigns</a>
+    </div>
+
+    <button id="showDonationFormBtn">Donate to Campaign</button>
+    <div id="campaignList">
+        <p>Loading completed campaigns...</p> <!-- Loading message -->
+    </div>
+
+    <!-- Overlay for displaying transaction details -->
+    <div id="transactionOverlay" style="display: none;">
+        <div class="overlay-content" id="transactionOverlayContent">
+            <button class="close-btn" onclick="closeOverlay('transactionOverlay')">x</button>
+            <h2>Transaction Details</h2>
+            <div id="transactionList"></div>
+        </div>
+    </div>
+
+    <div class="donationFormOverlay" id="donationFormOverlay">
+        <div class="donationFormContainer">
+            <h1>Donate to Campaign</h1>
+            <form id="donationForm">
+                <label for="campaignId">Campaign ID:</label>
+                <input type="text" id="campaignId" name="campaignId" required><br>
+                <label for="amount">Enter Donation Amount:</label>
+                <input type="number" id="amount" name="amount" required><br>
+                <label for="walletSecret">Enter Wallet Secret:</label>
+                <input type="text" id="walletSecret" name="walletSecret" required><br>
+                <button type="submit">Donate</button>
+            </form>
+            <div id="message"></div>
+            <button id="closeDonationFormBtn">Close</button>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2024 RippleCare @ tshetendev All rights reserved.</p>
+    </footer>
+
+    <script>
+        document.getElementById('showDonationFormBtn').addEventListener('click', () => {
+            document.getElementById('donationFormOverlay').style.display = 'block';
+        });
+
+        document.getElementById('closeDonationFormBtn').addEventListener('click', () => {
+            document.getElementById('donationFormOverlay').style.display = 'none';
+        });
+
+        document.getElementById('donationForm').addEventListener('submit', async (event) => {
+            event.preventDefault();
+
+            const campaignId = document.getElementById('campaignId').value;
+            const amount = document.getElementById('amount').value;
+            const walletSecret = document.getElementById('walletSecret').value;
+
+            // Display "Please wait..." message
+            document.getElementById('message').textContent = 'Please wait...';
+
+            try {
+                const response = await fetch('/donate', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ campaignId, amount, walletSecret })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    document.getElementById('message').textContent = 'Donation successful!';
+                } else {
+                    document.getElementById('message').textContent = 'Donation failed. Please try again.';
+                }
+            } catch (error) {
+                console.error('Error donating:', error);
+                document.getElementById('message').textContent = 'An error occurred while processing your donation. Please try again later.';
+            }
+        });
+
+        async function fetchCompletedCampaigns() {
+            try {
+                const campaignList = document.getElementById('campaignList');
+                campaignList.innerHTML = '<p>Loading campaigns...</p>'; // Show loading message
+
+                const response = await fetch('/completed-campaigns'); // Fetch all active campaigns
+                const campaigns = await response.json();
+
+                if (campaigns.length === 0) {
+                    campaignList.innerHTML = '<p>No campaigns available.</p>'; // Show message if no campaigns
+                } else {
+                    campaignList.innerHTML = ''; // Clear loading message
+                    // Reverse the order of campaigns to display the latest ones at the top
+                    campaigns.reverse().forEach(async (campaign) => {
+                        const campaignDiv = document.createElement('div');
+                        const reader = new FileReader();
+
+                        reader.onload = async function (event) {
+                            const imageDataUrl = event.target.result;
+
+                            campaignDiv.innerHTML = `
+                        <div class="campaign-card">
+                            <h3>${campaign.title}</h3>
+                            <h4><b>Campaign ID:</b> </br>${campaign.campaignId}</h4>
+                            <img src="${imageDataUrl}" alt="Campaign Image" width="350" height="200">
+                            <p><b>Description:</b> </br>${campaign.description}</p>
+                            <p><b>Target Amount:</b> </br>${campaign.targetAmount}</p>
+                            <p><b>Creator Wallet Address:</b> </br>${campaign.creatorWalletAddress}</p>
+                            <p><b>Status:</b> </br>${campaign.status}</p>
+                            <div id="raisedAmount_${campaign.campaignId}">Raised Amount: Loading...</div>
+                            <button class="view-transactions-btn" data-campaign-id="${campaign.campaignId}">View Transactions</button>
+                        </div>
+                    `;
+                            campaignList.appendChild(campaignDiv);
+
+                            // Attach event listener for viewing transactions
+                            const viewTransactionsBtn = campaignDiv.querySelector('.view-transactions-btn');
+                            viewTransactionsBtn.addEventListener('click', () => {
+                                const campaignId = viewTransactionsBtn.dataset.campaignId;
+                                fetchCampaignTransactions(campaignId);
+                            });
+
+                            // Fetch raised amount for the campaign
+                            try {
+                                const raisedAmountDiv = campaignDiv.querySelector(`#raisedAmount_${campaign.campaignId}`);
+                                const raisedAmountResponse = await fetch(`/campaigns/${campaign.campaignId}/raised`);
+                                const raisedAmountData = await raisedAmountResponse.json();
+                                raisedAmountDiv.textContent = `Raised Amount: ${raisedAmountData.totalRaised}`;
+                            } catch (error) {
+                                console.error('Error fetching raised amount for campaign:', error);
+                            }
+                        };
+
+                        // Convert the ArrayBuffer to Blob
+                        const blob = new Blob([new Uint8Array(campaign.image.data)], { type: 'image/jpeg' });
+
+                        // Read the Blob as a data URL
+                        reader.readAsDataURL(blob);
+                    });
+                }
+            } catch (error) {
+                console.error('Error fetching active campaigns:', error);
+                const campaignList = document.getElementById('campaignList');
+                campaignList.innerHTML = '<p>Error loading campaigns. Please try again later.</p>'; // Show error message
+            }
+        }
+
+
+        async function fetchCampaignTransactions(campaignId) {
+            try {
+                const response = await fetch(`/campaigns/${campaignId}/transactions`);
+                let transactions = await response.json();
+                transactions = transactions.reverse(); // Reverse the order of transactions
+
+                const transactionList = document.getElementById('transactionList');
+                transactionList.innerHTML = '';
+
+                if (transactions.length === 0) {
+                    const noTransactionsMessage = document.createElement('p');
+                    noTransactionsMessage.textContent = 'No transactions available.';
+                    transactionList.appendChild(noTransactionsMessage);
+                } else {
+                    transactions.forEach(transaction => {
+                        const transactionDiv = document.createElement('div');
+                        transactionDiv.innerHTML = `
+                            <p>Transaction ID: ${transaction.transactionId}</p>
+                            <p>Sender: ${transaction.sender}</p>
+                            <p>Receiver: ${transaction.receiver}</p>
+                            <p>Amount: ${transaction.amount}</p>
+                            <hr>
+                        `;
+                        transactionList.appendChild(transactionDiv);
+                    });
+                }
+
+                openOverlay('transactionOverlay'); // Show the overlay
+            } catch (error) {
+                console.error('Error fetching campaign transactions:', error);
+            }
+        }
+
+        // Function to open overlay
+        function openOverlay(id) {
+            const overlay = document.getElementById(id);
+            overlay.style.display = 'block';
+        }
+
+        // Function to close overlay
+        function closeOverlay(id) {
+            const overlay = document.getElementById(id);
+            overlay.style.display = 'none';
+        }
+
+        // Fetch Completed campaigns when the page loads
+        window.onload = async () => {
+            await fetchCompletedCampaigns();
+        };
+    </script>
+</body>
+
+</html>

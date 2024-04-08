@@ -1,0 +1,46 @@
+#createCampaignForm {
+    max-width: 400px;
+    margin: 0 auto;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 5px 5px 15px grey;
+    margin-bottom: 30px;
+    text-align: left;
+}
+
+#createCampaignForm label {
+    display: block;
+    margin-bottom: 8px;
+}
+
+input[type="text"],
+input[type="number"],
+textarea,
+input[type="file"] {
+    width: 95%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+#createCampaignForm button[type="submit"] {
+    width: 100%;
+    padding: 10px;
+    background-color: #4caf50;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+#createCampaignForm button[type="submit"]:hover {
+    background-color: #45a049;
+
+}
+
+body{
+    text-align: center;
+}
+
