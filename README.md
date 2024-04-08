@@ -1,0 +1,2 @@
+# RippleCare
+Donations through XRPL
