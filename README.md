@@ -1,6 +1,6 @@
-# Campaign Management Application
+# RippleCare
 
-Welcome to the Campaign Management Application! This application allows users to create fundraising campaigns, donate to existing campaigns, and view campaign details.
+Welcome to the RippleCare! This application allows users to create fundraising campaigns, donate to existing campaigns, and view campaign details.
 
 ## Features
 
@@ -52,14 +52,6 @@ Welcome to the Campaign Management Application! This application allows users to
 - `GET /active-campaigns`: Get all active campaigns.
 - `GET /wallet-balance`: Get the XRP wallet balance of the current user.
 
-## Contributors
-
-- [John Doe](https://github.com/johndoe)
-- [Jane Smith](https://github.com/janesmith)
-
-## License
-
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
 
 ## Acknowledgments
 
